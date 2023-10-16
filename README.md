@@ -12,7 +12,7 @@ more details:[link]()
 
 ## topological graph(Fig.1.)
 
-<div align=center><img src="https://github.com/gitover22/the-Congestion-Control-Process-in-TCP-in-NS-3/blob/main/pic/topo.png" height="765"/> </div>
+<div align=center><img src="https://github.com/gitover22/the-Congestion-Control-Process-in-TCP-in-NS-3/blob/main/pic/topo.png" height="500"/> </div>
 
 ## about tcp_test.cc
 
