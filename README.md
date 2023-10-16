@@ -8,7 +8,7 @@ You need to simulate a multi-hop network shown in Fig.1. Concretely, the neighbo
 
 Meanwhile, each host in the purple cloud sends UDP packets to a sink in the gray cloud at different intensities in sending rates via a path (R2, R3). The UDP is used to cause different congestion level of the link between (R2, R3) that can affect the QoS performance of the TCP.
 
-more details:[link]()
+More details:[link](https://github.com/zhouby-zjl/course-acn23a/blob/main/Experiments/Programming-Assignment.pdf)
 
 ## topological graph(Fig.1.)
 
