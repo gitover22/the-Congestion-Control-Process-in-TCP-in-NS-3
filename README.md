@@ -1,4 +1,5 @@
 # the-Congestion-Control-Process-in-TCP-in-NS-3
 Programming Assignment for CN2023: Understanding the Congestion Control  Process in TCP in NS-3.
 # Design goals
-
+You need to simulate a multi-hop network shown in Fig.1. Concretely, the neighbored hosts and routers are all connected with each other through the point-to-point link with 10Mbps bandwidth and 5ms delay. In running, each host contained in the green cloud connect to a server in the blue cloud through a routing path of (R1, R2, R3, R4) through TCP. In addition, the TCP is adopted with a congestion algorithm like newReno, Reno and Vegas. 
+Meanwhile, each host in the purple cloud sends UDP packets to a sink in the gray cloud at different intensities in sending rates via a path (R2, R3). The UDP is used to cause different congestion level of the link between (R2, R3) that can affect the QoS performance of the TCP.
