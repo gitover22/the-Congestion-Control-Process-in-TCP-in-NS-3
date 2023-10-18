@@ -8,50 +8,29 @@
 using namespace ns3;
 using namespace std;
 
-// 日志组件
-NS_LOG_COMPONENT_DEFINE ("AtcnCaseStudy");
+//here is topo:
+//                                           purple
+//                                             |
+//                                             |10.1.6.0
+//                                             |                             10.1.4.0           10.1.5.0
+//host(green)---------------R1-----------------R2------------------R3------------------R4----------------server(blue)
+//               10.1.1.0          10.1.2.0          10.1.3.0      |
+//                                                                 |10.1.7.0
+//                                                                 |
+//                                                                gray
 
-// 跟踪拥塞窗口的回调函数
-void tracer_CWnd(uint32_t x_old, uint32_t x_new) {
-    cout << "TCP_Cwnd" << "," << Simulator::Now().GetNanoSeconds() << ",new cwnd:" << x_new <<"old cwnd:"<<x_old << endl;
-}
+
+NS_LOG_COMPONENT_DEFINE ("FirstNS3Codes");  // 日志组件
 static const uint32_t totalTxBytes = 2000000;  // 指定总传输字节数
 static uint32_t currentTxBytes = 0;  // 指定当前传输字节数
-
-// 指定每次写入的数据大小
-static const uint32_t writeSize = 1040;
-uint8_t data[writeSize];
-
+static const uint32_t writeSize = 1024;  // 指定每次写入的数据大小
+uint8_t data[writeSize];  //数据区
 // 写数据直到缓冲区满
 void WriteUntilBufferFull (Ptr<Socket> localSocket, uint32_t txSpace);
-
 // 启动流
-void StartFlow (Ptr<Socket> localSocket, Ipv4Address servAddress, uint16_t servPort) {
-    localSocket->Connect (InetSocketAddress (servAddress, servPort));
-    localSocket->SetSendCallback (MakeCallback (&WriteUntilBufferFull));
-    WriteUntilBufferFull (localSocket, localSocket->GetTxAvailable ());
-    // 启动数据传输流，并设置回调以处理数据传输
-}
-
-// 写数据直到缓冲区满
-void WriteUntilBufferFull (Ptr<Socket> localSocket, uint32_t txSpace) {
-    while (currentTxBytes < totalTxBytes && localSocket->GetTxAvailable () > 0) {
-        uint32_t left = totalTxBytes - currentTxBytes;
-        uint32_t dataOffset = currentTxBytes % writeSize;
-        uint32_t toWrite = writeSize - dataOffset;
-        toWrite = std::min (toWrite, left);
-        toWrite = std::min (toWrite, localSocket->GetTxAvailable ());
-        int amountSent = localSocket->Send (&::data[dataOffset], toWrite, 0);
-        if(amountSent < 0) {
-            return;
-        }
-        currentTxBytes += amountSent;
-    }
-
-    if (currentTxBytes >= totalTxBytes) {
-        localSocket->Close ();
-    }
-}
+void StartFlow (Ptr<Socket> localSocket, Ipv4Address servAddress, uint16_t servPort);
+// 跟踪拥塞窗口的回调函数
+void tracer_CWnd(uint32_t x_old, uint32_t x_new);
 
 int 
 main (int argc, char *argv[]) {
@@ -83,8 +62,6 @@ main (int argc, char *argv[]) {
     
     NodeContainer hosts;  // 创建主机节点容器(来自green)
     hosts.Create (1);
-
-    
     NodeContainer servers;  // 创建服务器节点容器（来自blue）
     servers.Create (1);
 
@@ -138,4 +115,37 @@ main (int argc, char *argv[]) {
     Simulator::Run (); 
     Simulator::Destroy ();
     return 0;
+}
+
+
+// 写数据直到缓冲区满
+void WriteUntilBufferFull (Ptr<Socket> localSocket, uint32_t txSpace) {
+    while (currentTxBytes < totalTxBytes && localSocket->GetTxAvailable () > 0) {
+        uint32_t left = totalTxBytes - currentTxBytes;
+        uint32_t dataOffset = currentTxBytes % writeSize;
+        uint32_t toWrite = writeSize - dataOffset;
+        toWrite = std::min (toWrite, left);
+        toWrite = std::min (toWrite, localSocket->GetTxAvailable ());
+        int amountSent = localSocket->Send (&::data[dataOffset], toWrite, 0);
+        if(amountSent < 0) {
+            return;
+        }
+        currentTxBytes += amountSent;
+    }
+
+    if (currentTxBytes >= totalTxBytes) {
+        localSocket->Close ();
+    }
+}
+
+void StartFlow (Ptr<Socket> localSocket, Ipv4Address servAddress, uint16_t servPort) {
+    localSocket->Connect (InetSocketAddress (servAddress, servPort));
+    localSocket->SetSendCallback (MakeCallback (&WriteUntilBufferFull));
+    WriteUntilBufferFull (localSocket, localSocket->GetTxAvailable ());
+    // 启动数据传输流，并设置回调以处理数据传输
+}
+
+// 跟踪拥塞窗口的回调函数
+void tracer_CWnd(uint32_t x_old, uint32_t x_new) {
+    cout << "TCP_Cwnd" << "," << Simulator::Now().GetNanoSeconds() << ",new cwnd:" << x_new <<"old cwnd:"<<x_old << endl;
 }
