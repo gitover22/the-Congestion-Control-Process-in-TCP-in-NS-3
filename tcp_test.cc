@@ -102,7 +102,7 @@ main (int argc, char *argv[]) {
     // localSocket->SetAttribute ("SegmentSize", UintegerValue (writeSize));
     // localSocket->SetAttribute ("SlowStartThreshold", UintegerValue (currentTxBytes));
     // localSocket->SetAttribute ("HighWaterMark", UintegerValue (totalTxBytes));
-    Simulator::ScheduleNow (&StartFlow, localSocket, host_R1_intf.GetAddress (1), port);
+    Simulator::ScheduleNow (&StartFlow, localSocket, R4_server_intf.GetAddress (1), port);
 
 
 
@@ -159,5 +159,5 @@ void StartFlow (Ptr<Socket> localSocket, Ipv4Address servAddress, uint16_t servP
 
 // 跟踪拥塞窗口的回调函数
 void tracer_CWnd(uint32_t x_old, uint32_t x_new) {
-    cout << "TCP_Cwnd" << "," << Simulator::Now().GetNanoSeconds() << ",new cwnd:" << x_new << endl;
+    cout << "TCP_Cwnd" << "," << Simulator::Now().GetNanoSeconds() << "    old cwnd: "<<x_old<<"--->new cwnd:" << x_new << endl;
 }
