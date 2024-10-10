@@ -21,11 +21,11 @@ using namespace std;
 //                                                                gray
 
 
-NS_LOG_COMPONENT_DEFINE ("FirstNS3Codes");  // 日志组件
+NS_LOG_COMPONENT_DEFINE ("FirstNS3Codes"); 
 static const uint32_t totalTxBytes = 2000000;  // 指定总传输字节数
 static uint32_t currentTxBytes = 0;  // 指定当前传输字节数
 static const uint32_t writeSize = 1024;  // 指定每次写入的数据大小
-uint8_t data[writeSize];  //数据区
+uint8_t data[writeSize];
 // 写数据直到缓冲区满
 void WriteUntilBufferFull (Ptr<Socket> localSocket, uint32_t txSpace);
 // 启动流
@@ -38,10 +38,10 @@ main (int argc, char *argv[]) {
     CommandLine cmd (__FILE__);
     cmd.Parse (argc, argv);
     Time::SetResolution(Time::NS);
-    NodeContainer nodes;  //结点
+    NodeContainer nodes; 
     nodes.Create (6);
 
-    PointToPointHelper p2pHelper;   // 创建点对点连接的帮助类
+    PointToPointHelper p2pHelper;
     p2pHelper.SetDeviceAttribute ("DataRate", StringValue ("10Mbps")); 
     p2pHelper.SetChannelAttribute ("Delay", StringValue ("5ms"));
 
@@ -52,7 +52,7 @@ main (int argc, char *argv[]) {
     // 安装主机到路由器连接和服务器到路由器连接
     NetDeviceContainer host_R1 = p2pHelper.Install (nodes.Get (0), nodes.Get (1));
     NetDeviceContainer server_R4 = p2pHelper.Install (nodes.Get (4), nodes.Get (5));
-    InternetStackHelper stack;  // 创建互联网协议栈的帮助类
+    InternetStackHelper stack;
     stack.Install (nodes);
 
     // 配置ip
