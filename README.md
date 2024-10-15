@@ -14,10 +14,10 @@ More details:[link](https://github.com/zhouby-zjl/course-acn23a/blob/main/Experi
 
 <div align=center><img src="https://github.com/gitover22/the-Congestion-Control-Process-in-TCP-in-NS-3/blob/main/pic/topo.png" height="450"/> </div>
 
-## about tcp_test.cc
+## about run.cc
 
 This file is the source file from which the topology is built. However, it has not been further optimized
 
 **tips**:you can copy it to your ns-allinone-3.35/ns-3.35/scratch,and input commands below to run it:
 
-`./waf --run scratch/tcp_test.cc`
+`./waf --run scratch/run.cc`
